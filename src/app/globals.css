@@ -2,7 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* Definir la fuente Futura Now Regular */
+@font-face {
+  font-family: 'Futura Now';
+  src: url('/fonts/futura-now-headline/FuturaNowHeadline.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Definir la fuente Futura Now Bold */
+@font-face {
+  font-family: 'Futura Now';
+  src: url('/fonts/futura-now-headline/FuturaNowHeadlineExtraBoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+
+.tsjtitle {
+  font-family: 'Futura Now', Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  letter-spacing: -0.02em;
+}
+
+
+/* :root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -18,4 +42,4 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
-}
+} */

@@ -11,6 +11,7 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        tsjcolor: "#031D5A",
       },
     },
   },
