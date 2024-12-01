@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, FormProvider, useFormContext } from "react-hook-form";
 import { FiCheckCircle } from "react-icons/fi";
 import {
@@ -15,13 +15,11 @@ import {
   FaFileContract,
 } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { IMaskInput } from "react-imask";
+import { RequestListInterface } from "@/app/juez/interfaces/RequestList";
 
 const MultiStepForm = () => {
-  const methods = useForm();
+  const methods = useForm<{ [key: string]: RequestListInterface }>(); // Reemplaza { [key: string]: any } con un tipo específico si lo tienes
   const [currentStep, setCurrentStep] = useState(0);
-  const ref = useRef(null);
-  const inputRef = useRef(null);
 
   const steps = [
     <Encabezado key="step1" />,
@@ -48,7 +46,12 @@ const MultiStepForm = () => {
   ];
 
   useEffect(() => {
-    const savedData = JSON.parse(localStorage.getItem("formData"));
+    const data = localStorage.getItem("formData");
+    let savedData;
+
+    if (data && data !== "") {
+      savedData = JSON.parse(data);
+    }
 
     if (savedData) {
       // Mostrar SweetAlert cuando la página se recarga
@@ -73,9 +76,9 @@ const MultiStepForm = () => {
     }
   }, [methods]);
 
-  const handleNext = (data) => {
+  const handleNext = (data: Record<string, RequestListInterface>) => {
     // Combina los datos actuales con los previos guardados en localStorage
-    const savedData = JSON.parse(localStorage.getItem("formData")) || {};
+    const savedData = JSON.parse(localStorage.getItem("formData") ?? "{}");
     const updatedData = { ...savedData, ...data };
     localStorage.setItem("formData", JSON.stringify(updatedData));
 
@@ -158,7 +161,7 @@ const Encabezado = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -202,7 +205,7 @@ const IdentificacionSolicitante = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -459,7 +462,7 @@ const IdentificacionRepresentado = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -528,7 +531,7 @@ const IdentificacionPresuntoAgraviante = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -624,7 +627,7 @@ const DescripcionHechos = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -644,7 +647,6 @@ const DescripcionHechos = () => {
             errors.hechos?.narrativa ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Describa los hechos de forma clara y cronológica"
-          rows="4"
         ></textarea>
         {errors.hechos?.narrativa && (
           <p className="text-red-500 text-sm mt-1">
@@ -665,7 +667,6 @@ const DescripcionHechos = () => {
             errors.hechos?.circunstancias ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Indique el lugar, fecha y circunstancias de los hechos"
-          rows="4"
         ></textarea>
         {errors.hechos?.circunstancias && (
           <p className="text-red-500 text-sm mt-1">
@@ -686,7 +687,6 @@ const DescripcionHechos = () => {
             errors.hechos?.derechos ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Especifique los derechos constitucionales vulnerados"
-          rows="4"
         ></textarea>
         {errors.hechos?.derechos && (
           <p className="text-red-500 text-sm mt-1">
@@ -702,7 +702,7 @@ const FundamentosJuridicos = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -722,7 +722,6 @@ const FundamentosJuridicos = () => {
             errors.juridicos?.normas ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Escriba las normas constitucionales aplicables"
-          rows="4"
         ></textarea>
         {errors.juridicos?.normas && (
           <p className="text-red-500 text-sm mt-1">
@@ -739,7 +738,6 @@ const FundamentosJuridicos = () => {
           {...register("juridicos.jurisprudencia")}
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Cite la jurisprudencia relevante (opcional)"
-          rows="4"
         ></textarea>
       </div>
 
@@ -755,7 +753,6 @@ const FundamentosJuridicos = () => {
             errors.juridicos?.solicitudes ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Escriba las solicitudes concretas al tribunal"
-          rows="4"
         ></textarea>
         {errors.juridicos?.solicitudes && (
           <p className="text-red-500 text-sm mt-1">
@@ -771,7 +768,7 @@ const MedidasCautelares = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -791,7 +788,6 @@ const MedidasCautelares = () => {
             errors.cautelares?.medidas ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Escriba las medidas cautelares urgentes que solicita"
-          rows="4"
         ></textarea>
         {errors.cautelares?.medidas && (
           <p className="text-red-500 text-sm mt-1">
@@ -807,22 +803,31 @@ const RecaudosNecesarios = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
-  const [cedulaFiles, setCedulaFiles] = useState([]);
-  const [documentosFiles, setDocumentosFiles] = useState([]);
+  } = useFormContext<RequestListInterface>();
+  const [cedulaFiles, setCedulaFiles] = useState<string[]>([]); // Ahora el estado acepta arreglos de cadenas
+  const [documentosFiles, setDocumentosFiles] = useState<string[]>([]);
 
   // Cargar archivos previamente guardados en localStorage
   useEffect(() => {
-    const savedCedulaFiles =
-      JSON.parse(localStorage.getItem("cedulaFiles")) || [];
-    const savedDocumentosFiles =
-      JSON.parse(localStorage.getItem("documentosFiles")) || [];
-    setCedulaFiles(savedCedulaFiles);
-    setDocumentosFiles(savedDocumentosFiles);
+    const savedCedulaFiles = localStorage.getItem("cedulaFiles");
+    const parsedCedulaFiles = savedCedulaFiles
+      ? JSON.parse(savedCedulaFiles)
+      : [];
+
+    const savedDocumentosFiles = localStorage.getItem("documentosFiles");
+    const parsedDocumentosFiles = savedDocumentosFiles
+      ? JSON.parse(savedDocumentosFiles)
+      : [];
+
+    setCedulaFiles(parsedCedulaFiles);
+    setDocumentosFiles(parsedDocumentosFiles);
   }, []);
 
-  const handleCedulaFileChange = (event) => {
-    const files = Array.from(event.target.files);
+  // Manejador para el cambio de archivos de cédula
+  const handleCedulaFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = Array.from(event.target.files || []);
     const newCedulaFiles = files.map((file) => file.name);
 
     // Actualizar el estado y guardar los archivos de cédula en localStorage
@@ -833,15 +838,16 @@ const RecaudosNecesarios = () => {
     });
   };
 
+  // Manejador para el cambio de archivos de documentos
   const handleDocumentosFileChange = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const files = Array.from(event.target.files);
+    const files = Array.from(event.target.files || []);
     const newDocumentosFiles = files.map((file) => file.name);
 
     // Actualizar el estado y guardar los archivos de documentos en localStorage
-    setDocumentosFiles((prevFiles) => {
-      const updatedFiles = [...prevFiles, ...newDocumentosFiles];
+    setDocumentosFiles((prevFiles: string[]) => {
+      const updatedFiles = [...prevFiles, ...newDocumentosFiles]; // Asegúrate de que newDocumentosFiles sea del tipo correcto
       localStorage.setItem("documentosFiles", JSON.stringify(updatedFiles));
       return updatedFiles;
     });
@@ -922,7 +928,7 @@ const DeclaracionJurada = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">

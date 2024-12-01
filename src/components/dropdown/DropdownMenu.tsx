@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaTimes, FaCog } from "react-icons/fa";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const DropdownMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,40 +16,40 @@ const DropdownMenu = () => {
   const menuItems = pathname.startsWith("/juez") ? (
     <>
       <li>
-        <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+        <Link href="#" className="block px-4 py-2 hover:bg-gray-100">
           Perfil
-        </a>
-        <a href="/juez" className="block px-4 py-2 hover:bg-gray-100">
+        </Link>
+        <Link href="/juez" className="block px-4 py-2 hover:bg-gray-100">
           Dashboard
-        </a>
+        </Link>
       </li>
       <li>
-        <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+        <Link href="#" className="block px-4 py-2 hover:bg-gray-100">
           Solicitudes pendientes
-        </a>
+        </Link>
       </li>
       <li>
-        <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+        <Link href="#" className="block px-4 py-2 hover:bg-gray-100">
           Cerrar sesión
-        </a>
+        </Link>
       </li>
     </>
   ) : (
     <>
       <li>
-        <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+        <Link href="#" className="block px-4 py-2 hover:bg-gray-100">
           Perfil
-        </a>
+        </Link>
       </li>
       <li>
-        <a href="/solicitudes" className="block px-4 py-2 hover:bg-gray-100">
+        <Link href="/solicitudes" className="block px-4 py-2 hover:bg-gray-100">
           Mis Solicitudes
-        </a>
+        </Link>
       </li>
       <li>
-        <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+        <Link href="#" className="block px-4 py-2 hover:bg-gray-100">
           Cerrar sesión
-        </a>
+        </Link>
       </li>
     </>
   );

@@ -1,15 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { RequestListInterface } from "../interfaces/RequestList";
 import Link from "next/link";
 
 const RequestList = () => {
-  const storedData = localStorage.getItem("formData");
-  const requestList:RequestListInterface = storedData ? JSON.parse(storedData) : {};
-
-  console.log(requestList);
-
+  const [requestList, setRequestList] = useState({} as RequestListInterface)
+  
+  useEffect(() => {
+    if(typeof window !== 'undefined') {
+      const data = localStorage.getItem("formData");
+      if (data) {
+        const requestList: RequestListInterface = JSON.parse(data);
+        console.log(requestList);
+        setRequestList(requestList);
+      }
+  }}, []);
   
   return (
     <div className="flex flex-col mt-8 ">

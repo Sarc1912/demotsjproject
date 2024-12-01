@@ -21,7 +21,7 @@ import Image from "next/image";
 import { FaFilePdf } from "react-icons/fa6";
 
 const RequestUser = () => {
-  const methods = useForm();
+  const methods = useForm<{ [key: string]: RequestListInterface }>(); // Reemplaza { [key: string]: RequestListInterface } con un tipo específico si lo tienes
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
@@ -49,16 +49,20 @@ const RequestUser = () => {
   ];
 
   useEffect(() => {
-    const savedData = JSON.parse(localStorage.getItem("formData"));
+    let savedData;
+    const data = localStorage.getItem("formData");
 
-    if (savedData && savedData !== "") {
+    if (data) {
+      savedData = JSON.parse(data);
+    }
+
+    if (savedData) {
       // Recuperamos los datos de forma automática sin mostrar la alerta
       methods.reset(savedData);
     }
   }, [methods]);
 
-  const handleNext = (data: RequestListInterface) => {
-    // Combina los datos actuales con los previos guardados en localStorage
+  const handleNext = (data: Record<string, RequestListInterface>) => {
     const savedData = JSON.parse(localStorage.getItem("formData") ?? "{}");
     const updatedData = { ...savedData, ...data };
 
@@ -206,7 +210,7 @@ const Encabezado = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -252,7 +256,7 @@ const IdentificacionSolicitante = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -511,7 +515,7 @@ const IdentificacionRepresentado = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -584,7 +588,7 @@ const IdentificacionPresuntoAgraviante = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -685,7 +689,7 @@ const DescripcionHechos = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -705,7 +709,6 @@ const DescripcionHechos = () => {
             errors.hechos?.narrativa ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Describa los hechos de forma clara y cronológica"
-          rows="4"
         ></textarea>
         {errors.hechos?.narrativa && (
           <p className="text-red-500 text-sm mt-1">
@@ -726,7 +729,6 @@ const DescripcionHechos = () => {
             errors.hechos?.circunstancias ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Indique el lugar, fecha y circunstancias de los hechos"
-          rows="4"
         ></textarea>
         {errors.hechos?.circunstancias && (
           <p className="text-red-500 text-sm mt-1">
@@ -747,7 +749,6 @@ const DescripcionHechos = () => {
             errors.hechos?.derechos ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Especifique los derechos constitucionales vulnerados"
-          rows="4"
         ></textarea>
         {errors.hechos?.derechos && (
           <p className="text-red-500 text-sm mt-1">
@@ -763,7 +764,7 @@ const FundamentosJuridicos = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -783,7 +784,6 @@ const FundamentosJuridicos = () => {
             errors.juridicos?.normas ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Escriba las normas constitucionales aplicables"
-          rows="4"
         ></textarea>
         {errors.juridicos?.normas && (
           <p className="text-red-500 text-sm mt-1">
@@ -800,7 +800,6 @@ const FundamentosJuridicos = () => {
           {...register("juridicos.jurisprudencia")}
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Cite la jurisprudencia relevante (opcional)"
-          rows="4"
         ></textarea>
       </div>
 
@@ -816,7 +815,6 @@ const FundamentosJuridicos = () => {
             errors.juridicos?.solicitudes ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Escriba las solicitudes concretas al tribunal"
-          rows="4"
         ></textarea>
         {errors.juridicos?.solicitudes && (
           <p className="text-red-500 text-sm mt-1">
@@ -832,7 +830,7 @@ const MedidasCautelares = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -852,7 +850,6 @@ const MedidasCautelares = () => {
             errors.cautelares?.medidas ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Escriba las medidas cautelares urgentes que solicita"
-          rows="4"
         ></textarea>
         {errors.cautelares?.medidas && (
           <p className="text-red-500 text-sm mt-1">
@@ -865,22 +862,16 @@ const MedidasCautelares = () => {
 };
 
 const RecaudosNecesarios = () => {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
   const [cedulaFiles, setCedulaFiles] = useState([]);
-  const [documentosFiles, setDocumentosFiles] = useState([]);
 
   // Cargar archivos previamente guardados en localStorage
   useEffect(() => {
-    const savedCedulaFiles =
-      JSON.parse(localStorage.getItem("cedulaFiles")) || [];
-    const savedDocumentosFiles =
-      JSON.parse(localStorage.getItem("documentosFiles")) || [];
-    setCedulaFiles(savedCedulaFiles);
-    setDocumentosFiles(savedDocumentosFiles);
+    const savedCedulaFiles = localStorage.getItem("cedulaFiles");
+    const parsedCedulaFiles = savedCedulaFiles ? JSON.parse(savedCedulaFiles) : [];
+  
+    setCedulaFiles(parsedCedulaFiles);
   }, []);
+  
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -931,7 +922,7 @@ const DeclaracionJurada = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<RequestListInterface>();
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">

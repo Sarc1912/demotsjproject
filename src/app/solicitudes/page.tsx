@@ -32,14 +32,18 @@ const Page = () => {
     setData(combinedData);
   }, []);
 
+  console.log(data);
+
   return (
     <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-lg p-8 mt-8">
-      <h1 className="text-3xl font-semibold mb-6 text-gray-800">Mis Solicitudes</h1>
+      <h1 className="text-3xl font-semibold mb-6 text-gray-800">
+        Mis Solicitudes
+      </h1>
 
       {/* Crear solicitud */}
       <div className="mb-6 text-right">
         <Link
-          href={'/'}
+          href={"/"}
           className="px-6 py-3 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 transition-all duration-200"
         >
           Crear Solicitud
@@ -51,18 +55,33 @@ const Page = () => {
         <table className="min-w-full table-auto">
           <thead>
             <tr className="bg-gray-200 text-gray-700">
-              <th className="px-6 py-4 text-left font-medium border-b">Expediente</th>
-              <th className="px-6 py-4 text-left font-medium border-b">Abogado</th>
-              <th className="px-6 py-4 text-left font-medium border-b">Estatus</th>
-              <th className="px-6 py-4 text-left font-medium border-b">Motivo (si aplica)</th>
+              <th className="px-6 py-4 text-left font-medium border-b">
+                Expediente
+              </th>
+              <th className="px-6 py-4 text-left font-medium border-b">
+                Abogado
+              </th>
+              <th className="px-6 py-4 text-left font-medium border-b">
+                Estatus
+              </th>
+              <th className="px-6 py-4 text-left font-medium border-b">
+                Motivo (si aplica)
+              </th>
             </tr>
           </thead>
           <tbody>
             {data.length > 0 ? (
               data.map((item, index) => (
-                <tr key={index} className="border-b hover:bg-gray-50 transition-all">
-                  <td className="px-6 py-4 text-gray-800">{item.encabezado.expediente}</td>
-                  <td className="px-6 py-4 text-gray-600">{item.declaracion.abogado}</td>
+                <tr
+                  key={index}
+                  className="border-b hover:bg-gray-50 transition-all"
+                >
+                  <td className="px-6 py-4 text-gray-800">
+                    {item.encabezado.expediente}
+                  </td>
+                  <td className="px-6 py-4 text-gray-600">
+                    {item.declaracion.abogado}
+                  </td>
                   <td className="px-6 py-4">
                     <span
                       className={`px-4 py-2 rounded-full ${
