@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className="antialiased">
         <div className="bg-tsjcolor text-white p-4 flex justify-between items-center">
           <div className="flex items-center">

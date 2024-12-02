@@ -35,6 +35,8 @@ export interface RequestListInterface {
 
   export interface Hechos {
     narrativa: string;
+    lugar: string;
+    fecha: string;
     circunstancias: string;
     derechos: string;
   }
@@ -58,6 +60,7 @@ export interface RequestListInterface {
   export interface Representado {
     nombre: string;
     apellido: string;
+    tipoDoc: string;
     cedula: string;
     relacion: string;
   }

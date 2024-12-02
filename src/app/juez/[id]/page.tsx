@@ -545,28 +545,50 @@ const IdentificacionRepresentado = () => {
         />
       </div>
 
-      <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2">
-          Cédula de Identidad:
-        </label>
-        <input
-          readOnly
-          {...register("representado.cedula", {
-            pattern: {
-              value: /^[0-9]+$/,
-              message: "Solo se permiten números.",
-            },
-          })}
-          className={`w-full px-4 py-2 border ${
-            errors.representado?.cedula ? "border-red-500" : "border-gray-300"
-          } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
-          placeholder="Ingrese la cédula de identidad del representado"
-        />
-        {errors.representado?.cedula && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.representado.cedula.message}
-          </p>
-        )}
+      <div className="mb-4 flex gap-3">
+        <div className="flex-1/2">
+          <label className="block text-gray-700 font-medium mb-2">
+            Tipo Doc.:
+          </label>
+          <select
+            {...register("representado.tipoDoc", {
+              required: "Este campo es obligatorio.",
+            })}
+            className={`w-[70px] px-4 py-2 border ${
+              errors.representado?.tipoDoc ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          >
+            <option value="V">V</option>
+            <option value="E">E</option>
+          </select>
+          {errors.representado?.tipoDoc && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.representado.tipoDoc.message}
+            </p>
+          )}
+        </div>
+        <div className="flex-1">
+          <label className="block text-gray-700 font-medium mb-2">
+            Cédula de Identidad:
+          </label>
+          <input
+            {...register("representado.cedula", {
+              pattern: {
+                value: /^[0-9]+$/,
+                message: "Solo se permiten números.",
+              },
+            })}
+            className={`w-full px-4 py-2 border ${
+              errors.representado?.cedula ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            placeholder="Ingrese la cédula de identidad del representado"
+          />
+          {errors.representado?.cedula && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.representado.cedula.message}
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="mb-4">
@@ -716,10 +738,48 @@ const DescripcionHechos = () => {
           </p>
         )}
       </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium mb-2">
+          Lugar de los hechos:
+        </label>
+        <input
+          {...register("hechos.lugar", {
+            required: "Este campo es obligatorio.",
+          })}
+          className={`w-full px-4 py-2 border ${
+            errors.hechos?.lugar ? "border-red-500" : "border-gray-300"
+          } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          placeholder="Indique el lugar de los hechos"
+        />
+        {errors.hechos?.lugar && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.hechos.lugar.message}
+          </p>
+        )}
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium mb-2">
+          Fecha
+        </label>
+        <input
+          type="date"
+          {...register("hechos.fecha", {
+            required: "Este campo es obligatorio.",
+          })}
+          className={`w-full px-4 py-2 border ${
+            errors.hechos?.fecha ? "border-red-500" : "border-gray-300"
+          } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+        />
+        {errors.hechos?.fecha && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.hechos.fecha.message}
+          </p>
+        )}
+      </div>
 
       <div className="mb-4">
         <label className="block text-gray-700 font-medium mb-2">
-          Lugar, Fecha y Circunstancias:
+          Circunstancias:
         </label>
         <textarea
           {...register("hechos.circunstancias", {
@@ -728,7 +788,7 @@ const DescripcionHechos = () => {
           className={`w-full px-4 py-2 border ${
             errors.hechos?.circunstancias ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
-          placeholder="Indique el lugar, fecha y circunstancias de los hechos"
+          placeholder="Indique las circunstancias de los hechos"
         ></textarea>
         {errors.hechos?.circunstancias && (
           <p className="text-red-500 text-sm mt-1">
