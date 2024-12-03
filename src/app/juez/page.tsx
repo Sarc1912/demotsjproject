@@ -1,6 +1,7 @@
 import React from "react";
 import DashboardCards from "./components/DashboardCards";
 import RequestList from "./components/RequestList";
+import ChatWindow from "@/components/chatbot/ChatWindow";
 
 const page = () => {
 
@@ -13,6 +14,7 @@ const page = () => {
           <div className="mt-8"></div>
             <RequestList />
           </div>
+          <ChatWindow />
     </>
   );
 };

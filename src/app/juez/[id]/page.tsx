@@ -19,10 +19,12 @@ import Swal from "sweetalert2";
 import { RequestListInterface } from "../interfaces/RequestList";
 import Image from "next/image";
 import { FaFilePdf } from "react-icons/fa6";
+import ChatWindow from "@/components/chatbot/ChatWindow";
 
 const RequestUser = () => {
   const methods = useForm<{ [key: string]: RequestListInterface }>(); // Reemplaza { [key: string]: RequestListInterface } con un tipo específico si lo tienes
   const [currentStep, setCurrentStep] = useState(0);
+  const [dataRequest, setDataRequest] = useState<RequestListInterface>();
 
   const steps = [
     <Encabezado key="step1" />,
@@ -54,6 +56,7 @@ const RequestUser = () => {
 
     if (data) {
       savedData = JSON.parse(data);
+      setDataRequest(savedData);
     }
 
     if (savedData) {
@@ -80,12 +83,13 @@ const RequestUser = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-
       console.log(savedData.encabezado.expediente);
       // Mostrar SweetAlert cuando el formulario esté completo
       Swal.fire({
         title: "Solicitud Aprobada!",
-        text: "Se ha aprobado la solicitud Nro.: "+ savedData.encabezado.expediente,
+        text:
+          "Se ha aprobado la solicitud Nro.: " +
+          savedData.encabezado.expediente,
         icon: "success",
         confirmButtonText: "Ok",
       }).then(() => {
@@ -134,7 +138,12 @@ const RequestUser = () => {
         existingNoAprove.push(updatedData);
         localStorage.setItem("noAprove", JSON.stringify(existingNoAprove));
 
-        Swal.fire("No Aprobado!", "Se ha rechazado la solicitud Nro.: "+savedData.encabezado.expediente, "success");
+        Swal.fire(
+          "No Aprobado!",
+          "Se ha rechazado la solicitud Nro.: " +
+            savedData.encabezado.expediente,
+          "success"
+        );
       }
     });
   };
@@ -145,69 +154,78 @@ const RequestUser = () => {
     }
   };
 
+  console.log(dataRequest);
+
   return (
-    <FormProvider {...methods}>
-      <form
-        onSubmit={methods.handleSubmit(handleNext)}
-        className="max-w-3xl mx-auto bg-white p-6 shadow-lg rounded-lg"
-      >
-        {/* Indicadores de pasos con iconos */}
-        <div className="flex justify-between mb-6">
-          {steps.map((step, index) => (
-            <div
-              key={index}
-              className={`flex items-center justify-center flex-col transition-all ${
-                currentStep === index ? "text-blue-600" : "text-gray-400"
-              }`}
-            >
+    <div>
+      <FormProvider {...methods}>
+        <h1 className="text-3xl font-bold text-center tsjtitle pb-3">
+          Solicitud Nro.: {dataRequest?.encabezado?.expediente || "..."}
+        </h1>
+
+        <form
+          onSubmit={methods.handleSubmit(handleNext)}
+          className="max-w-3xl mx-auto bg-white p-6 shadow-lg rounded-lg"
+        >
+          {/* Indicadores de pasos con iconos */}
+          <div className="flex justify-between mb-6">
+            {steps.map((step, index) => (
               <div
-                onClick={() => setCurrentStep(index)} // Esto permite que se navegue directamente al paso
-                className={`w-14 h-14 flex items-center justify-center rounded-full border-2 transition-all cursor-pointer ${
-                  currentStep === index
-                    ? "bg-tsjcolor text-white"
-                    : "bg-white border-gray-300"
+                key={index}
+                className={`flex items-center justify-center flex-col transition-all ${
+                  currentStep === index ? "text-blue-600" : "text-gray-400"
                 }`}
               >
-                {stepIcons[index]}
+                <div
+                  onClick={() => setCurrentStep(index)} // Esto permite que se navegue directamente al paso
+                  className={`w-14 h-14 flex items-center justify-center rounded-full border-2 transition-all cursor-pointer ${
+                    currentStep === index
+                      ? "bg-tsjcolor text-white"
+                      : "bg-white border-gray-300"
+                  }`}
+                >
+                  {stepIcons[index]}
+                </div>
+                <div className="text-xs mt-2">{index + 1}</div>
               </div>
-              <div className="text-xs mt-2">{index + 1}</div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        {/* Paso actual */}
-        {steps[currentStep]}
+          {/* Paso actual */}
+          {steps[currentStep]}
 
-        <div className="mt-6 flex justify-between items-center">
-          {currentStep > 0 && (
+          <div className="mt-6 flex justify-between items-center">
+            {currentStep > 0 && (
+              <button
+                type="button"
+                onClick={handleBack}
+                className="px-4 py-2 text-white bg-gray-500 hover:bg-gray-600 rounded-md focus:outline-none"
+              >
+                Anterior
+              </button>
+            )}
+
+            {/* Botón para rechazar */}
+            {currentStep === steps.length - 1 && (
+              <button
+                type="button"
+                onClick={handleAprove}
+                className="px-6 py-2 text-white bg-red-500 hover:bg-red-600 rounded-md focus:outline-none mt-4"
+              >
+                Rechazar
+              </button>
+            )}
             <button
-              type="button"
-              onClick={handleBack}
-              className="px-4 py-2 text-white bg-gray-500 hover:bg-gray-600 rounded-md focus:outline-none"
+              type="submit"
+              className="px-6 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-md focus:outline-none"
             >
-              Anterior
+              {currentStep === steps.length - 1 ? "Aprobar" : "Siguiente"}
             </button>
-          )}
-
-          {/* Botón para rechazar */}
-          {currentStep === steps.length - 1 && (
-            <button
-              type="button"
-              onClick={handleAprove}
-              className="px-6 py-2 text-white bg-red-500 hover:bg-red-600 rounded-md focus:outline-none mt-4"
-            >
-              Rechazar
-            </button>
-          )}
-          <button
-            type="submit"
-            className="px-6 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-md focus:outline-none"
-          >
-            {currentStep === steps.length - 1 ? "Aprobar" : "Siguiente"}
-          </button>
-        </div>
-      </form>
-    </FormProvider>
+          </div>
+        </form>
+      </FormProvider>
+      <ChatWindow />
+    </div>
   );
 };
 
@@ -560,7 +578,9 @@ const IdentificacionRepresentado = () => {
               required: "Este campo es obligatorio.",
             })}
             className={`w-[70px] px-4 py-2 border ${
-              errors.representado?.tipoDoc ? "border-red-500" : "border-gray-300"
+              errors.representado?.tipoDoc
+                ? "border-red-500"
+                : "border-gray-300"
             } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           >
             <option value="V">V</option>
@@ -763,9 +783,7 @@ const DescripcionHechos = () => {
         )}
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2">
-          Fecha
-        </label>
+        <label className="block text-gray-700 font-medium mb-2">Fecha</label>
         <input
           type="date"
           {...register("hechos.fecha", {
@@ -932,11 +950,12 @@ const RecaudosNecesarios = () => {
   // Cargar archivos previamente guardados en localStorage
   useEffect(() => {
     const savedCedulaFiles = localStorage.getItem("cedulaFiles");
-    const parsedCedulaFiles = savedCedulaFiles ? JSON.parse(savedCedulaFiles) : [];
-  
+    const parsedCedulaFiles = savedCedulaFiles
+      ? JSON.parse(savedCedulaFiles)
+      : [];
+
     setCedulaFiles(parsedCedulaFiles);
   }, []);
-  
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">

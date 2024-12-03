@@ -35,7 +35,7 @@ body::before {
   background-size: cover; /* Asegura que la imagen cubra toda el área */
   background-position: center;
   background-repeat: no-repeat; /* Evita que se repita */
-  opacity: 0.2; /* Ajusta el nivel de opacidad */
+  opacity: 0.25; /* Ajusta el nivel de opacidad */
   z-index: -1; /* Coloca la imagen detrás del contenido */
   pointer-events: none; /* Evita interferencias con eventos */
 }
