@@ -5,7 +5,6 @@ import UsersIcons from "@/components/users/UsersIcons";
 import { Metadata } from "next";
 import "./globals.css";
 
-
 export const metadata: Metadata = {
   title: "TSJ",
   description: "Solicitud de amparo",
@@ -18,9 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className="antialiased">
+      <body
+        className="antialiased"
+      >
         <div className="bg-tsjcolor text-white p-4 flex justify-between items-center">
-          <div className="flex items-center">
+          <div className="flex items-center ">
             <div className="flex items-center justify-center w-20 h-20 bg-white border-4 border-tsjcolor rounded-full">
               <Image
                 src="/logo_tsj.png"
@@ -40,7 +41,10 @@ export default function RootLayout({
             <DropdownMenu /> {/* Aquí está el menú desplegable */}
           </div>
         </div>
+        <div className="p-10">
+
         {children}
+        </div>
       </body>
     </html>
   );

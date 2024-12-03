@@ -18,6 +18,29 @@
   font-style: normal;
 }
 
+body {
+  position: relative;
+  min-height: 100vh; /* Asegura que el cuerpo abarque al menos toda la pantalla */
+  margin: 0;
+}
+
+body::before {
+  content: "";
+  position: fixed; /* Asegura que el fondo siempre esté visible */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* Cubre toda la pantalla */
+  background-image: url('/background_image.jpg'); /* Cambia la ruta por tu imagen */
+  background-size: cover; /* Asegura que la imagen cubra toda el área */
+  background-position: center;
+  background-repeat: no-repeat; /* Evita que se repita */
+  opacity: 0.2; /* Ajusta el nivel de opacidad */
+  z-index: -1; /* Coloca la imagen detrás del contenido */
+  pointer-events: none; /* Evita interferencias con eventos */
+}
+
+
 
 .tsjtitle {
   font-family: 'Futura Now', Arial, Helvetica, sans-serif;
