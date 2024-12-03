@@ -12,7 +12,6 @@ const RequestList = () => {
       const data = localStorage.getItem("formData");
       if (data) {
         const requestList: RequestListInterface = JSON.parse(data);
-        console.log(requestList);
         setRequestList(requestList);
       }
   }}, []);
@@ -50,7 +49,7 @@ const RequestList = () => {
                         </div>
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 whitespace-nowrap">
-                        <div className="text-sm leading-5 text-gray-900">{requestList.representado?.nombre ?? "representado"} {requestList.representado?.apellido ?? "representado"}</div>
+                        <div className="text-sm leading-5 text-gray-900">{requestList.representado?.nombre ?? "N/A"} {requestList.representado?.apellido ?? "representado"}</div>
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 whitespace-nowrap">
                         <div className="text-sm leading-5 text-gray-900">{requestList.encabezado?.tribunal ?? "encabezado"}</div>

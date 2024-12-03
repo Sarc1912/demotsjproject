@@ -15,7 +15,10 @@ import {
   FaFileContract,
 } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { RequestListInterface } from "@/app/juez/interfaces/RequestList";
+import {
+  RequestListInterface,
+  Solicitante,
+} from "@/app/juez/interfaces/RequestList";
 
 const MultiStepForm = () => {
   const methods = useForm<{ [key: string]: RequestListInterface }>(); // Reemplaza { [key: string]: any } con un tipo específico si lo tienes
@@ -82,8 +85,15 @@ const MultiStepForm = () => {
     const updatedData = { ...savedData, ...data };
     localStorage.setItem("formData", JSON.stringify(updatedData));
 
+    const condicion: string =
+      (data.solicitante as unknown as Solicitante)?.condicion || "";
+
     if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
+      if (condicion == "propio" && currentStep == 1) {
+        setCurrentStep(currentStep + 2);
+      } else {
+        setCurrentStep(currentStep + 1);
+      }
     } else {
       // Mostrar SweetAlert cuando el formulario esté completo
       Swal.fire({
@@ -97,9 +107,16 @@ const MultiStepForm = () => {
     }
   };
 
-  const handleBack = () => {
+  const handleBack = (data: Record<string, RequestListInterface>) => {
+    const condicion: string =
+      (data.solicitante as unknown as Solicitante)?.condicion || "";
+
     if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
+      if (condicion === "propio" && currentStep === 3) {
+        setCurrentStep(currentStep - 2);
+      } else {
+        setCurrentStep(currentStep - 1);
+      }
     }
   };
 
@@ -139,7 +156,7 @@ const MultiStepForm = () => {
           {currentStep > 0 && (
             <button
               type="button"
-              onClick={handleBack}
+              onClick={() => handleBack(methods.getValues())} // Obtén los valores actuales del formulario
               className="px-4 py-2 text-white bg-gray-500 hover:bg-gray-600 rounded-md focus:outline-none"
             >
               Anterior
@@ -461,8 +478,14 @@ const IdentificacionSolicitante = () => {
 const IdentificacionRepresentado = () => {
   const {
     register,
+    getValues,
     formState: { errors },
   } = useFormContext<RequestListInterface>();
+
+  const data = getValues();
+  const { condicion } = data.solicitante || {}; // Asegúrate de que 'solicitante' existe
+
+  console.log("Condición:", condicion);
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-md p-6">
@@ -473,31 +496,45 @@ const IdentificacionRepresentado = () => {
       <div className="mb-4">
         <label className="block text-gray-700 font-medium mb-2">Nombres:</label>
         <input
-          {...register("representado.nombre")}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          {...register("representado.nombre", {
+            required: condicion === "representante" ? "Este campo es obligatorio." : false,
+          })}
+          className={`w-full px-4 py-2 border ${
+            errors.representado?.nombre ? "border-red-500" : "border-gray-300"
+          } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Ingrese los nombres del representado"
         />
+        {errors.representado?.nombre && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.representado.nombre.message}
+          </p>
+        )}
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2">
-          Apellidos:
-        </label>
+        <label className="block text-gray-700 font-medium mb-2">Apellidos:</label>
         <input
-          {...register("representado.apellido")}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          {...register("representado.apellido", {
+            required: condicion === "representante" ? "Este campo es obligatorio." : false,
+          })}
+          className={`w-full px-4 py-2 border ${
+            errors.representado?.apellido ? "border-red-500" : "border-gray-300"
+          } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Ingrese los apellidos del representado"
         />
+        {errors.representado?.apellido && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.representado.apellido.message}
+          </p>
+        )}
       </div>
 
       <div className="mb-4 flex gap-3">
         <div className="flex-1/2">
-          <label className="block text-gray-700 font-medium mb-2">
-            Tipo Doc.:
-          </label>
+          <label className="block text-gray-700 font-medium mb-2">Tipo Doc.:</label>
           <select
             {...register("representado.tipoDoc", {
-              required: "Este campo es obligatorio.",
+              required: condicion === "representante" ? "Este campo es obligatorio." : false,
             })}
             className={`w-[70px] px-4 py-2 border ${
               errors.representado?.tipoDoc ? "border-red-500" : "border-gray-300"
@@ -518,6 +555,7 @@ const IdentificacionRepresentado = () => {
           </label>
           <input
             {...register("representado.cedula", {
+              required: condicion === "representante" ? "Este campo es obligatorio." : false,
               pattern: {
                 value: /^[0-9]+$/,
                 message: "Solo se permiten números.",
@@ -541,14 +579,24 @@ const IdentificacionRepresentado = () => {
           Relación Jurídica:
         </label>
         <input
-          {...register("representado.relacion")}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          {...register("representado.relacion", {
+            required: condicion === "representante" ? "Este campo es obligatorio." : false,
+          })}
+          className={`w-full px-4 py-2 border ${
+            errors.representado?.relacion ? "border-red-500" : "border-gray-300"
+          } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           placeholder="Ingrese la relación jurídica (e.g., tutor, apoderado)"
         />
+        {errors.representado?.relacion && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.representado.relacion.message}
+          </p>
+        )}
       </div>
     </div>
   );
 };
+
 
 const IdentificacionPresuntoAgraviante = () => {
   const {
@@ -697,9 +745,7 @@ const DescripcionHechos = () => {
         )}
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2">
-          Fecha
-        </label>
+        <label className="block text-gray-700 font-medium mb-2">Fecha</label>
         <input
           type="date"
           {...register("hechos.fecha", {
