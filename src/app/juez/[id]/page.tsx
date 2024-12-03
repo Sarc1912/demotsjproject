@@ -80,10 +80,12 @@ const RequestUser = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
+
+      console.log(savedData.encabezado.expediente);
       // Mostrar SweetAlert cuando el formulario esté completo
       Swal.fire({
         title: "Solicitud Aprobada!",
-        text: "Se ha aprobado la solicitud Nro.",
+        text: "Se ha aprobado la solicitud Nro.: "+ savedData.encabezado.expediente,
         icon: "success",
         confirmButtonText: "Ok",
       }).then(() => {
