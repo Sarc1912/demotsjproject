@@ -118,6 +118,9 @@ const RequestUser = () => {
 
         // Guardar los datos no aprobados en noAprove en localStorage
         const savedData = JSON.parse(localStorage.getItem("formData") ?? "{}");
+
+        console.log(savedData.encabezado.expediente);
+
         const updatedData = {
           ...savedData,
           status: "no aprobado",
@@ -131,7 +134,7 @@ const RequestUser = () => {
         existingNoAprove.push(updatedData);
         localStorage.setItem("noAprove", JSON.stringify(existingNoAprove));
 
-        Swal.fire("No Aprobado!", "Ha rechazado la solicitud.", "success");
+        Swal.fire("No Aprobado!", "Se ha rechazado la solicitud Nro.: "+savedData.encabezado.expediente, "success");
       }
     });
   };
