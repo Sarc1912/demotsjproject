@@ -44,10 +44,10 @@ export const handleSendMessage = (
       // Verificar si el campo `encabezado.expediente` coincide
       const solicitud = solicitudes.find(
         (item: { encabezado: { expediente: string } }) =>
-          item.encabezado.expediente === input.trim()
+          (item && item.encabezado) ? item.encabezado.expediente === input.trim() : ""
       );
   
-      if (solicitud) {
+      if (solicitud && solicitud !== "") {
         // Generar recomendación aleatoria
         const recomendacion = Math.random() > 0.5 ? "aprobar" : "rechazar";
   
