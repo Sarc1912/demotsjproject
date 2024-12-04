@@ -51,7 +51,7 @@ export const handleSendMessage = (
         // Generar recomendación aleatoria
         const recomendacion = Math.random() > 0.5 ? "aprobar" : "rechazar";
   
-        const botResponse = `Hemos encontrado la solicitud con código ${input}. Basándonos en nuestra evaluación, recomendamos ${recomendacion}.`;
+        const botResponse = `Hemos encontrado la solicitud con número ${input}. Basándonos en nuestra evaluación, recomendamos ${recomendacion}.`;
   
         setMessages((prev) => [
           ...prev,

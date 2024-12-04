@@ -58,10 +58,10 @@ const ChatWindow: React.FC = () => {
         <Image
           src="/justice.webp"
           alt="Abrir Chat"
-          className="w-20 h-20 cursor-pointer hover:scale-110 transition-transform rounded-full"
+          className="w-32 h-w-32 cursor-pointer hover:scale-110 transition-transform rounded-full"
           onClick={() => setIsOpen(true)}
-          width={64}
-          height={64}
+          width={128}
+          height={128}
         />
       )}
 
