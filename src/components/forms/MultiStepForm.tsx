@@ -19,21 +19,46 @@ import {
   RequestListInterface,
   Solicitante,
 } from "@/app/juez/interfaces/RequestList";
+import { Tooltip } from "react-tooltip";
 
 const MultiStepForm = () => {
   const methods = useForm<{ [key: string]: RequestListInterface }>(); // Reemplaza { [key: string]: any } con un tipo específico si lo tienes
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
-    <Encabezado key="step1" />,
-    <IdentificacionSolicitante key="step2" />,
-    <IdentificacionRepresentado key="step3" />,
-    <IdentificacionPresuntoAgraviante key="step4" />,
-    <DescripcionHechos key="step5" />,
-    <FundamentosJuridicos key="step6" />,
-    <MedidasCautelares key="step7" />,
-    <RecaudosNecesarios key="step8" />,
-    <DeclaracionJurada key="step9" />,
+    { component: <Encabezado key="step1" />, tooltip: "Encabezado" },
+    {
+      component: <IdentificacionSolicitante key="step2" />,
+      tooltip: "Solicitante",
+    },
+    {
+      component: <IdentificacionRepresentado key="step3" />,
+      tooltip: "Representado",
+    },
+    {
+      component: <IdentificacionPresuntoAgraviante key="step4" />,
+      tooltip: "Agraviante",
+    },
+    {
+      component: <DescripcionHechos key="step5" />,
+      tooltip: "Descripción de los Hechos",
+    },
+    {
+      component: <FundamentosJuridicos key="step6" />,
+      tooltip: "Fundamentos Jurídicos",
+    },
+    {
+      component: <MedidasCautelares key="step7" />,
+      tooltip: "Medidas Cautelares",
+    },
+    {
+      component: <RecaudosNecesarios key="step8" />,
+      tooltip: "Recaudos Necesarios",
+    },
+    {
+      component: <DeclaracionJurada key="step9" />,
+      tooltip: "Declaración Jurada",
+    },
   ];
 
   const stepIcons = [
@@ -141,16 +166,20 @@ const MultiStepForm = () => {
                     ? "bg-tsjcolor text-white"
                     : "bg-white border-gray-300"
                 }`}
+                data-tooltip-id={`tooltip-${index}`} // Tooltip ID
+                data-tooltip-content={step.tooltip} // Tooltip content
               >
                 {stepIcons[index]}
               </div>
               <div className="text-xs mt-2">{index + 1}</div>
+              <Tooltip id={`tooltip-${index}`} place="top" />
+
             </div>
           ))}
         </div>
 
         {/* Paso actual */}
-        {steps[currentStep]}
+        {steps[currentStep].component}
 
         <div className="mt-6 flex justify-between items-center">
           {currentStep > 0 && (

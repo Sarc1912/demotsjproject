@@ -20,6 +20,7 @@ import { RequestListInterface } from "../interfaces/RequestList";
 import Image from "next/image";
 import { FaFilePdf } from "react-icons/fa6";
 import ChatWindow from "@/components/chatbot/ChatWindow";
+import { Tooltip } from "react-tooltip"; // Usaremos una librería de tooltips si es necesario.
 
 const RequestUser = () => {
   const methods = useForm<{ [key: string]: RequestListInterface }>(); // Reemplaza { [key: string]: RequestListInterface } con un tipo específico si lo tienes
@@ -27,15 +28,39 @@ const RequestUser = () => {
   const [dataRequest, setDataRequest] = useState<RequestListInterface>();
 
   const steps = [
-    <Encabezado key="step1" />,
-    <IdentificacionSolicitante key="step2" />,
-    <IdentificacionRepresentado key="step3" />,
-    <IdentificacionPresuntoAgraviante key="step4" />,
-    <DescripcionHechos key="step5" />,
-    <FundamentosJuridicos key="step6" />,
-    <MedidasCautelares key="step7" />,
-    <RecaudosNecesarios key="step8" />,
-    <DeclaracionJurada key="step9" />,
+    { component: <Encabezado key="step1" />, tooltip: "Encabezado" },
+    {
+      component: <IdentificacionSolicitante key="step2" />,
+      tooltip: "Solicitante",
+    },
+    {
+      component: <IdentificacionRepresentado key="step3" />,
+      tooltip: "Representado",
+    },
+    {
+      component: <IdentificacionPresuntoAgraviante key="step4" />,
+      tooltip: "Agraviante",
+    },
+    {
+      component: <DescripcionHechos key="step5" />,
+      tooltip: "Descripción de los Hechos",
+    },
+    {
+      component: <FundamentosJuridicos key="step6" />,
+      tooltip: "Fundamentos Jurídicos",
+    },
+    {
+      component: <MedidasCautelares key="step7" />,
+      tooltip: "Medidas Cautelares",
+    },
+    {
+      component: <RecaudosNecesarios key="step8" />,
+      tooltip: "Recaudos Necesarios",
+    },
+    {
+      component: <DeclaracionJurada key="step9" />,
+      tooltip: "Declaración Jurada",
+    },
   ];
 
   const stepIcons = [
@@ -108,6 +133,7 @@ const RequestUser = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Sí, rechazar!",
+      cancelButtonText: "Cancelar",
       input: "textarea",
       inputPlaceholder: "Escribe el motivo del rechazo...",
       inputValidator: (value) => {
@@ -154,8 +180,6 @@ const RequestUser = () => {
     }
   };
 
-  console.log(dataRequest);
-
   return (
     <div>
       <FormProvider {...methods}>
@@ -167,7 +191,7 @@ const RequestUser = () => {
           onSubmit={methods.handleSubmit(handleNext)}
           className="max-w-3xl mx-auto bg-white p-6 shadow-lg rounded-lg"
         >
-          {/* Indicadores de pasos con iconos */}
+          {/* Indicadores de pasos con iconos y tooltips */}
           <div className="flex justify-between mb-6">
             {steps.map((step, index) => (
               <div
@@ -177,22 +201,27 @@ const RequestUser = () => {
                 }`}
               >
                 <div
-                  onClick={() => setCurrentStep(index)} // Esto permite que se navegue directamente al paso
+                  onClick={() => setCurrentStep(index)} // Permite navegar directamente al paso
                   className={`w-14 h-14 flex items-center justify-center rounded-full border-2 transition-all cursor-pointer ${
                     currentStep === index
                       ? "bg-tsjcolor text-white"
                       : "bg-white border-gray-300"
                   }`}
+                  data-tooltip-id={`tooltip-${index}`} // Tooltip ID
+                  data-tooltip-content={step.tooltip} // Tooltip content
                 >
                   {stepIcons[index]}
                 </div>
                 <div className="text-xs mt-2">{index + 1}</div>
+
+                {/* Tooltip */}
+                <Tooltip id={`tooltip-${index}`} place="top" />
               </div>
             ))}
           </div>
 
           {/* Paso actual */}
-          {steps[currentStep]}
+          {steps[currentStep].component}
 
           <div className="mt-6 flex justify-between items-center">
             {currentStep > 0 && (
